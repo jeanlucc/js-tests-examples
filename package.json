@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node .",
     "test": "npm run server:test",
-    "server:test": "cd test && NODE_ENV=test ../node_modules/.bin/gulp coverage && cd .. && npm run server:coverage",
+    "server:test": "cd tests && NODE_ENV=test ../node_modules/.bin/gulp coverage && cd .. && npm run server:coverage",
     "server:coverage": "./node_modules/.bin/istanbul-combine -p both -r none coverage/server-report/coverage-final.json"
   },
   "bugs": {
