@@ -1,0 +1,33 @@
+{
+  "name": "demo-backend-tests",
+  "version": "1.0.0",
+  "description": "Demo of several unit tests for your node server",
+  "main": "server/server.js",
+  "scripts": {
+    "test": "npm run server:test",
+    "server:test": "cd test && NODE_ENV=test ../node_modules/.bin/gulp coverage && cd .. && npm run server:coverage",
+    "server:coverage": "./node_modules/.bin/istanbul-combine -p both -r none coverage/server-report/coverage-final.json"
+  },
+  "author": {"name": "Thibaut Gatouillat", "email": "thibautg@theodo.fr"},
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tib-tib/demo-backend-tests/issues"
+  },
+  "homepage": "",
+  "dependencies": {
+    "compression": "1.6.1"
+    "errorhandler": "1.4.3",
+    "lodash": "4.6.1",
+    "loopback": "2.27.0",
+    "loopback-boot": "2.17.0",
+    "loopback-component-explorer": "2.3.0",
+    "loopback-datasource-juggler": "2.45.2",
+    "loopback-promisify": "0.2.0",
+  },
+  "devDependencies": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tib-tib/demo-backend-tests"
+  }
+}
