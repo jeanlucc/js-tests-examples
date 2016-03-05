@@ -43,7 +43,7 @@ describe 'Task', ->
 
   describe 'saveWithDate', ->
     beforeEach, ->
-      @taskSanitizerStub = sinon.stub(taskSanitizer, 'sanitize').returns id: 51, date: '15-11-1951'
+      @taskSanitizerStub = sinon.stub(taskSanitizer, 'sanitize').returns id: 51, date: '15-11-1240'
       @TaskUpsertStub = sinon.stub(Task, 'upsert').returns bluebird.resolve id: 24
 
     it 'should fail if upsert fails', ->
@@ -57,7 +57,7 @@ describe 'Task', ->
       Task.saveWithDate id: 42
       .then (savedTask) ->
         taskSanitizer.sanitize.should.have.been.calledWithExactly id: 42
-        Task.upsert.should.have.been.calledWithExactly id: 51, date: '15-11-1951'
+        Task.upsert.should.have.been.calledWithExactly id: 51, date: '15-11-1240'
         savedTask.should.deep.equal id: 24
 
   describe 'batchDelete', ->
