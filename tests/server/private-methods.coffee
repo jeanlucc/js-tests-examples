@@ -1,4 +1,4 @@
-privateMethods = require '../../server/private-methods'
+privateMethods = require '../../server/service/private-methods'
 using = require '../common/utils/data-provider'
 
 describe 'privateMethods', ->

@@ -1,5 +1,5 @@
 assert = require('chai').assert
-currentUserProvider = require '../../server/current-user-provider'
+currentUserProvider = require '../../server/service/current-user-provider'
 loopback = require 'loopback'
 sinon = require 'sinon'
 using = require '../common/utils/data-provider'
