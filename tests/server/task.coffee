@@ -1,3 +1,4 @@
+bluebird = require 'bluebird'
 currentUserProvider = require '../../server/service/current-user-provider'
 loopback = require 'loopback'
 should = require('chai').should()
@@ -7,40 +8,35 @@ using = require '../common/utils/data-provider'
 Task = loopback.getModel 'Task'
 
 describe 'Task', ->
-  describe 'getStaticTasks', ->
-    it 'should return static tasks', ->
-      callback = sinon.spy()
-      Task.getStaticTasks callback
-      @callback.should.have.been.calledWithExactly null, ['this', 'illustrate', 'the', 'basic', 'test', 'of', 'a', 'function', 'which', 'uses', 'a', 'callback']
-
-    it 'should return 12 tasks', ->
-      callback = sinon.spy()
-      Task.getStaticTasks callback
-      @callback.should.have.been.calledWithExactly null, sinon.match (tasks) ->
-        tasks.length.should.equal 12
-
   describe 'getMyTasks', ->
     beforeEach ->
       @currentUserProviderFindStub = sinon.stub(currentUserProvider, 'find').returns id: 42
-      @TaskFindStub = sinon.stub(Task, 'find').callsArgWith 1, null, ['task1', 'task2']
-      @callback = sinon.spy()
+      @TaskFindStub = sinon.stub(Task, 'find').returns bluebird.resolve ['task1', 'task2']
 
     noCurrentUserDataProvider = [
       null
       name: 'Bobby'
     ]
     using noCurrentUserDataProvider, (user) ->
-      it 'should fail if there is non current user' ->
+      it 'should fail if there is no current user', (done) ->
         @currentUserProviderFindStub.returns user
-        Task.getMyTasks @callback
-        @callback.should.have.been.calledWithExactly 'NO_CURRENT_USER'
+        Task.getMyTasks()
+        .catch (error) ->
+          error.should.equal 'NO_CURRENT_USER'
+          done()
 
-    it 'should fail if find of tasks fails', ->
-      @TaskFindStub.callsArgWith 1, 'DB_ERROR'
-      Task.getMyTasks @callback
-      @callback.should.have.been.calledWithExactly 'DB_ERROR'
+    it 'should fail if find of tasks fails', (done) ->
+      @TaskFindStub.returns bluebird.reject 'DB_ERROR'
+      Task.getMyTasks()
+      .catch (error) ->
+        error.should.equal 'DB_ERROR'
+        done()
 
     it 'should return task of current user', ->
-      Task.getMyTasks @callback
-      @TaskFindStub.should.have.been.calledWith where: owner: 42
-      @callback.should.have.been.calledWithExactly null, ['task1', 'task2']
+      Task.getMyTasks()
+      .then (tasks) ->
+        Task.find.should.have.been.calledWithExactly where: owner: 42
+        tasks.should.deep.equal ['task1', 'task2']
+        done()
+
+  describe 'batchDelete', ->
