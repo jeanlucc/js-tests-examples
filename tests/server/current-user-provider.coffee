@@ -11,7 +11,10 @@ describe 'currentUserProvider', ->
       {context: get: undefined, expectedResult: null}
       {context: get: 'toto', expectedResult: null}
       {context: get: name: 'toto', expectedResult: null}
-      {context: get: -> undefined, expectedResult: null}
+      {context:
+        get: -> undefined,
+        expectedResult: null
+      }
       {context: get: -> id: 42, expectedResult: id: 42}
     ]
     using currentUserDataProvider, (data) ->

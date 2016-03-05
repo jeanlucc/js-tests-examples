@@ -1,5 +1,5 @@
 should = require('chai').should()
-filterChecker = require '../../server/service/filter-checker'
+filterValidator = require '../../server/service/filter-validator'
 using = require '../common/utils/data-provider.js'
 
 describe 'filterValidator', ->
@@ -19,4 +19,4 @@ describe 'filterValidator', ->
     ]
     using filterProvider, (data) ->
       it 'should check if filter is valid', ->
-        filterChecker.isFilterValid(data.filterValue).should.equal data.isValid
+        filterValidator.isFilterValid(data.filterValue).should.equal data.isValid
