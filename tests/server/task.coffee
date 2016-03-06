@@ -20,20 +20,7 @@ describe 'Task', ->
 
   describe 'getMyTasks', ->
     beforeEach ->
-      @currentUserProviderFindStub = @sandbox.stub(currentUserProvider, 'find').returns id: 42
       @TaskFindStub = @sandbox.stub(Task, 'find').returns bluebird.resolve ['task1', 'task2']
-
-    noCurrentUserDataProvider = [
-      null
-      name: 'Bobby'
-    ]
-    using noCurrentUserDataProvider, (user) ->
-      it 'should fail if there is no current user', (done) ->
-        @currentUserProviderFindStub.returns user
-        Task.getMyTasks()
-        .catch (error) ->
-          error.should.equal 'NO_CURRENT_USER'
-          done()
 
     it 'should fail if find of tasks fails', (done) ->
       @TaskFindStub.returns bluebird.reject 'DB_ERROR'
@@ -43,9 +30,9 @@ describe 'Task', ->
         done()
 
     it 'should return task of current user', (done) ->
-      Task.getMyTasks()
+      Task.getMyTasks 'testCreator'
       .then (tasks) ->
-        Task.find.should.have.been.calledWithExactly where: ownerId: 42
+        Task.find.should.have.been.calledWithExactly where: creator: 'testCreator'
         tasks.should.deep.equal ['task1', 'task2']
         done()
 

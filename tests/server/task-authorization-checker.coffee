@@ -69,8 +69,13 @@ describe 'taskAuthorizationChecker', ->
       it 'should be rejected when a task is not one of mine, fulfilled otherwise', (done) ->
         @sandbox.stub(Task, 'getMyTasks').returns bluebird.resolve data.myTasks
 
-        promise = taskAuthorizationChecker.checkTasksAreMine data.tasks
+        promise = taskAuthorizationChecker.checkTasksAreMine 'testCreator', data.tasks
         if data.authorized
-          promise.should.be.fulfilled.and.notify done
+          promise.then ->
+            Task.getMyTasks.should.have.been.calledWithExactly 'testCreator'
+            done()
         else
-          promise.should.be.rejectedWith('NOT_MY_TASKS').and.notify done
+          promise.catch (error) ->
+            Task.getMyTasks.should.have.been.calledWithExactly 'testCreator'
+            error.should.equal 'NOT_MY_TASKS'
+            done()

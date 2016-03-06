@@ -28,32 +28,20 @@ describe 'TaskCallback', ->
   describe 'getMyTasks', ->
     beforeEach ->
       @sandbox = sinon.sandbox.create()
-      @currentUserProviderFindStub = @sandbox.stub(currentUserProvider, 'find').returns id: 42
       @TaskCallbackFindStub = @sandbox.stub(TaskCallback, 'find').callsArgWith 1, null, ['task1', 'task2']
       @callback = sinon.spy()
 
     afterEach ->
       @sandbox.restore()
 
-    noCurrentUserDataProvider = [
-      null
-      name: 'Bobby'
-    ]
-    using noCurrentUserDataProvider, (user) ->
-      it 'should fail if there is no current user', (done) ->
-        @currentUserProviderFindStub.returns user
-        TaskCallback.getMyTasks @callback
-        @callback.should.have.been.calledWithExactly 'NO_CURRENT_USER'
-        done()
-
     it 'should fail if find of tasks fails', (done) ->
       @TaskCallbackFindStub.callsArgWith 1, 'DB_ERROR'
-      TaskCallback.getMyTasks @callback
+      TaskCallback.getMyTasks null, @callback
       @callback.should.have.been.calledWithExactly 'DB_ERROR'
       done()
 
     it 'should return task of current user', (done) ->
-      TaskCallback.getMyTasks @callback
-      TaskCallback.find.should.have.been.calledWith where: ownerId: 42
+      TaskCallback.getMyTasks 'testCreator', @callback
+      TaskCallback.find.should.have.been.calledWith where: creator: 'testCreator'
       @callback.should.have.been.calledWithExactly null, ['task1', 'task2']
       done()

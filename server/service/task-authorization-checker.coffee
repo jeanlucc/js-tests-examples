@@ -4,8 +4,8 @@ loopback = require 'loopback'
 
 Task = loopback.getModel 'Task'
 
-checkTasksAreMine = (tasks) ->
-  Task.getMyTasks()
+checkTasksAreMine = (creator, tasks) ->
+  Task.getMyTasks creator
   .then (myTasks) ->
     tasksId = _.map tasks, 'id'
     myTasksId = _.map myTasks, 'id'

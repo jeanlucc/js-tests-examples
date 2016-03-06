@@ -1,5 +1,6 @@
 {
   "name": "Task",
+  "plural": "tasks",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
@@ -23,11 +24,5 @@
   },
   "options": {
     "promisify": true
-  },
-  "relations": {
-    "owner": {
-      "model": "User",
-      "type": "belongsTo"
-    }
   }
 }

@@ -20,10 +20,8 @@ module.exports = (Task) ->
   Task.disableRemoteMethod('__get__owner', false);
   Task.disableRemoteMethod('createChangeStream', true);
 
-  Task.getMyTasks = ->
-    currentUser = currentUserProvider.find()
-    return bluebird.reject 'NO_CURRENT_USER' unless currentUser?.id?
-    Task.find where: ownerId: currentUser.id
+  Task.getMyTasks = (creator) ->
+    Task.find where: creator: creator
 
   Task.safeSave = (task) ->
     taskToUpdate = taskSanitizer.sanitize task
