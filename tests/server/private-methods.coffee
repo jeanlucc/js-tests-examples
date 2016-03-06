@@ -1,3 +1,4 @@
+assert = require('chai').assert
 privateMethods = require '../../server/service/private-methods'
 using = require '../common/utils/data-provider'
 
@@ -35,9 +36,9 @@ describe 'privateMethods', ->
       ]
       using elementADataProvider, (data) ->
         it 'should update thresholds with elementA', ->
-          myElement = update @myEntity, data.list
-          should.equal myElement.min, data.expectedMin
-          should.equal myElement.max, data.expectedMax
+          myElement = privateMethods.update @myElement, data.list
+          assert.equal myElement.min, data.expectedMin
+          assert.equal myElement.max, data.expectedMax
 
     describe 'updateWithElementB', ->
       elementBDataProvider = [
@@ -87,11 +88,7 @@ describe 'privateMethods', ->
       ]
       using elementBDataProvider, (data, index) ->
         it 'should update team, department, ssc with elementB', ->
-          myElement = update @myEntity, null, data.list
+          myElement = privateMethods.update @myElement, null, data.list
           assert.deepEqual myElement.team, data.expectedTeam
           assert.deepEqual myElement.department, data.expectedDepartment
           assert.deepEqual myElement.ssc, data.expectedSsc
-          myElement.should.equal sinon.match
-            team: data.expectedTeam
-            Department: data.expectedDepartment
-            ssc: data.expectedSsc

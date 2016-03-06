@@ -1,13 +1,13 @@
 _ = require 'lodash'
 
-updateWithElementA = ->
+updateWithElementA = (myElement, elementAList) ->
   currentElementA = _.find elementAList, (elementA) ->
     elementA.keyId is myElement.keyId
-  myElement.max = currentElementA?.min
-  myElement.min = currentElementA?.max
+  myElement.min = currentElementA?.min
+  myElement.max = currentElementA?.max
   myElement
 
-updateWithElementB = ->
+updateWithElementB = (myElement, elementBList) ->
   currentElementB = _.find elementBList, (elementB) ->
     elementB.keyId is myElement.keyId
   myElement.team = currentElementB?.team
@@ -18,3 +18,6 @@ updateWithElementB = ->
 update = (myElement, elementAList, elementBList) ->
   myElement = updateWithElementA myElement, elementAList
   updateWithElementB myElement, elementBList
+
+module.exports =
+  update: update
