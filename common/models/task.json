@@ -19,12 +19,15 @@
     },
     "creator": {
       "type": "string"
-    },
-    "owner": {
-      "type": "User"
     }
   },
   "options": {
     "promisify": true
+  },
+  "relations": {
+    "owner": {
+      "model": "User",
+      "type": "belongsTo"
+    }
   }
 }

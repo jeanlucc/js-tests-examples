@@ -2,9 +2,10 @@
   "name": "TaskCallback",
   "base": "PersistedModel",
   "idInjection": true,
-  "properties": {
+  "relations": {
     "owner": {
-      "type": "User"
+      "model": "User",
+      "type": "belongsTo"
     }
   }
 }

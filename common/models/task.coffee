@@ -6,6 +6,20 @@ taskSanitizer = require '../../server/service/task-sanitizer'
 
 module.exports = (Task) ->
 
+  Task.disableRemoteMethod('create', true);
+  Task.disableRemoteMethod('updateAttributes', false);
+  Task.disableRemoteMethod('updateAll', true);
+
+  Task.disableRemoteMethod('findById', true);
+  Task.disableRemoteMethod('findOne', true);
+  Task.disableRemoteMethod('exists', true);
+  Task.disableRemoteMethod('count', true);
+
+  Task.disableRemoteMethod('deleteById', true);
+
+  Task.disableRemoteMethod('__get__owner', false);
+  Task.disableRemoteMethod('createChangeStream', true);
+
   Task.getMyTasks = ->
     currentUser = currentUserProvider.find()
     return bluebird.reject 'NO_CURRENT_USER' unless currentUser?.id?
