@@ -1,3 +1,4 @@
+_ = require 'lodash'
 app = require '../../server/server'
 bluebird = require 'bluebird'
 currentUserProvider = require '../../server/service/current-user-provider'
@@ -11,10 +12,16 @@ using = require '../common/utils/data-provider'
 Task = app.models.Task
 
 describe 'Task', ->
+  beforeEach ->
+    @sandbox = sinon.sandbox.create()
+
+  afterEach ->
+    @sandbox.restore()
+
   describe 'getMyTasks', ->
     beforeEach ->
-      @currentUserProviderFindStub = sinon.stub(currentUserProvider, 'find').returns id: 42
-      @TaskFindStub = sinon.stub(Task, 'find').returns bluebird.resolve ['task1', 'task2']
+      @currentUserProviderFindStub = @sandbox.stub(currentUserProvider, 'find').returns id: 42
+      @TaskFindStub = @sandbox.stub(Task, 'find').returns bluebird.resolve ['task1', 'task2']
 
     noCurrentUserDataProvider = [
       null
@@ -35,38 +42,39 @@ describe 'Task', ->
         error.should.equal 'DB_ERROR'
         done()
 
-    it 'should return task of current user', ->
+    it 'should return task of current user', (done) ->
       Task.getMyTasks()
       .then (tasks) ->
-        Task.find.should.have.been.calledWithExactly where: owner: 42
+        Task.find.should.have.been.calledWithExactly where: ownerId: 42
         tasks.should.deep.equal ['task1', 'task2']
         done()
 
-  describe 'saveWithDate', ->
+  describe 'safeSave', ->
     beforeEach ->
-      @taskSanitizerStub = sinon.stub(taskSanitizer, 'sanitize').returns id: 51, date: '15-11-1240'
-      @TaskUpsertStub = sinon.stub(Task, 'upsert').returns bluebird.resolve id: 24
+      @taskSanitizerStub = @sandbox.stub(taskSanitizer, 'sanitize').returns id: 51, date: '15-11-1240'
+      @TaskUpsertStub = @sandbox.stub(Task, 'upsert').returns bluebird.resolve id: 24
 
-    it 'should fail if upsert fails', ->
+    it 'should fail if upsert fails', (done) ->
       @TaskUpsertStub.returns bluebird.reject 'UPSERT_ERROR'
-      Task.saveWithDate()
+      Task.safeSave()
       .catch (error) ->
         error.should.equal 'UPSERT_ERROR'
         done()
 
     it 'should upsert sanitized task', (done) ->
-      Task.saveWithDate id: 42
+      Task.safeSave id: 42
       .then (savedTask) ->
         taskSanitizer.sanitize.should.have.been.calledWithExactly id: 42
         Task.upsert.should.have.been.calledWithExactly id: 51, date: '15-11-1240'
         savedTask.should.deep.equal id: 24
+        done()
 
   describe 'batchDelete', ->
     beforeEach ->
-      @checkTasksAreMineStub = sinon.stub(taskAuthorizationChecker, 'checkTasksAreMine').returns bluebird.resolve()
-      @TaskDestroyAllStub = sinon.stub(Task, 'destroyAll').returns bluebird.resolve()
+      @checkTasksAreMineStub = @sandbox.stub(taskAuthorizationChecker, 'checkTasksAreMine').returns bluebird.resolve()
+      @TaskDestroyAllStub = @sandbox.stub(Task, 'destroyAll').returns bluebird.resolve()
 
-    it 'should fail if user has no authrozation', (done) ->
+    it 'should fail if user has no authorization', (done) ->
       @checkTasksAreMineStub.returns bluebird.reject 'AUTHORIZATION_ERROR'
       Task.batchDelete()
       .catch (error) ->
