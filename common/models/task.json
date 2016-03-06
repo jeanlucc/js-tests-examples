@@ -19,13 +19,12 @@
     },
     "creator": {
       "type": "string"
+    },
+    "owner": {
+      "type": "User"
     }
   },
   "options": {
     "promisify": true
-  },
-  "validations": [],
-  "relations": {},
-  "acls": [],
-  "methods": []
+  }
 }

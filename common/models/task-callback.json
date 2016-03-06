@@ -1,0 +1,10 @@
+{
+  "name": "TaskCallback",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "owner": {
+      "type": "User"
+    }
+  }
+}

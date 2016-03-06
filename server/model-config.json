@@ -32,6 +32,10 @@
     "dataSource": "db",
     "public": false
   },
+  "TaskCallback": {
+    "dataSource": "db",
+    "public": true
+  },
   "Task": {
     "dataSource": "db",
     "public": true

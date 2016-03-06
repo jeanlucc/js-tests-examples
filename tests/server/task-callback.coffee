@@ -12,12 +12,12 @@ describe 'TaskCallback', ->
     it 'should return static tasks', ->
       callback = sinon.spy()
       TaskCallback.getStaticTasks callback
-      @callback.should.have.been.calledWithExactly null, ['this', 'illustrate', 'the', 'basic', 'test', 'of', 'a', 'function', 'which', 'uses', 'a', 'callback']
+      callback.should.have.been.calledWithExactly null, ['this', 'illustrate', 'the', 'basic', 'test', 'of', 'a', 'function', 'which', 'uses', 'a', 'callback']
 
     it 'should return 12 tasks', ->
       callback = sinon.spy()
       TaskCallback.getStaticTasks callback
-      @callback.should.have.been.calledWithExactly null, sinon.match (tasks) ->
+      callback.should.have.been.calledWithExactly null, sinon.match (tasks) ->
         tasks.length.should.equal 12
 
   describe 'getMyTasks', ->
