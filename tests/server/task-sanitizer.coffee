@@ -1,5 +1,6 @@
+_ = require 'lodash'
 moment = require 'moment'
-should = require('chai').should
+should = require('chai').should()
 sinon = require 'sinon'
 taskSanitizer = require '../../server/service/task-sanitizer'
 

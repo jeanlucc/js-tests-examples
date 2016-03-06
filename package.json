@@ -19,6 +19,7 @@
   "homepage": "",
   "dependencies": {
     "bluebird": "3.3.3",
+    "chai-as-promised": "5.2.0",
     "compression": "1.6.1",
     "cors": "2.5.2",
     "errorhandler": "1.4.3",
@@ -28,7 +29,9 @@
     "loopback-boot": "2.6.5",
     "loopback-component-explorer": "2.3.0",
     "loopback-datasource-juggler": "2.45.2",
-    "loopback-promisify": "0.2.0"
+    "loopback-promisify": "0.2.0",
+    "moment": "2.11.2",
+    "sinon-chai": "2.8.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
