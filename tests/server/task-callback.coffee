@@ -1,10 +1,11 @@
+app = require '../../server/server'
 currentUserProvider = require '../../server/service/current-user-provider'
 loopback = require 'loopback'
 should = require('chai').should()
 sinon = require 'sinon'
 using = require '../common/utils/data-provider'
 
-TaskCallback = loopback.getModel 'TaskCallback'
+TaskCallback = app.models.TaskCallback
 
 describe 'TaskCallback', ->
   describe 'getStaticTasks', ->

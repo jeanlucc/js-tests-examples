@@ -11,9 +11,7 @@ gulp.task 'coverage', ->
   .pipe istanbul.hookRequire()
   .on 'finish', ->
     gulp.src [
-      './server/task-filter.coffee'
-      './server/filter-validator.coffee'
-      './server/task-authorization-checker.coffee'
+      './server/**/*.coffee'
     ]
     .pipe mocha()
     .pipe istanbul.writeReports

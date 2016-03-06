@@ -5,19 +5,22 @@ sinon = require 'sinon'
 using = require '../common/utils/data-provider'
 
 describe 'currentUserProvider', ->
+  beforeEach ->
+    @sandbox = sinon.sandbox.create()
+
+  afterEach ->
+    @sandbox.restore()
+
   describe 'find', ->
     currentUserDataProvider = [
-      {context: undefined, expectedResult: null}
-      {context: get: undefined, expectedResult: null}
-      {context: get: 'toto', expectedResult: null}
-      {context: get: name: 'toto', expectedResult: null}
-      {context:
-        get: -> undefined,
-        expectedResult: null
-      }
-      {context: get: -> id: 42, expectedResult: id: 42}
+      {}
+      {context: get: undefined}
+      {context: get: 'toto'}
+      {context: get: name: 'toto'}
+      {context: get: -> undefined}
+      {context: {get: -> id: 42}, expectedResult: id: 42}
     ]
     using currentUserDataProvider, (data) ->
       it 'should return the current user or null', ->
-        sinon.stub(loopback, 'getCurrentContext').returns data.context
+        @sandbox.stub(loopback, 'getCurrentContext').returns data.context
         assert.deepEqual currentUserProvider.find(), data.expectedResult

@@ -1,3 +1,4 @@
+app = require '../../server/server'
 bluebird = require 'bluebird'
 currentUserProvider = require '../../server/service/current-user-provider'
 loopback = require 'loopback'
@@ -7,7 +8,7 @@ taskAuthorizationChecker = require '../../server/service/task-authorization-chec
 taskSanitizer = require '../../server/service/task-sanitizer'
 using = require '../common/utils/data-provider'
 
-Task = loopback.getModel 'Task'
+Task = app.models.Task
 
 describe 'Task', ->
   describe 'getMyTasks', ->
@@ -42,7 +43,7 @@ describe 'Task', ->
         done()
 
   describe 'saveWithDate', ->
-    beforeEach, ->
+    beforeEach ->
       @taskSanitizerStub = sinon.stub(taskSanitizer, 'sanitize').returns id: 51, date: '15-11-1240'
       @TaskUpsertStub = sinon.stub(Task, 'upsert').returns bluebird.resolve id: 24
 
@@ -61,7 +62,7 @@ describe 'Task', ->
         savedTask.should.deep.equal id: 24
 
   describe 'batchDelete', ->
-    beforeEach, ->
+    beforeEach ->
       @checkTasksAreMineStub = sinon.stub(taskAuthorizationChecker, 'checkTasksAreMine').returns bluebird.resolve()
       @TaskDestroyAllStub = sinon.stub(Task, 'destroyAll').returns bluebird.resolve()
 
