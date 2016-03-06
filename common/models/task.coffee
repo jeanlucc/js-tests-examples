@@ -1,6 +1,7 @@
 _ = require 'lodash'
 bluebird = require 'bluebird'
 taskAuthorizationChecker = require '../../server/service/task-authorization-checker'
+taskFilter = require '../../server/service/task-filter'
 taskSanitizer = require '../../server/service/task-sanitizer'
 
 module.exports = (Task) ->
@@ -31,6 +32,11 @@ module.exports = (Task) ->
 
   Task.getMyTasks = (creator) ->
     Task.find where: creator: creator
+
+  Task.getFilteredTasks = (filter) ->
+    Task.find()
+    .then (allTasks) ->
+      taskFilter.filter allTasks, filter
 
   Task.safeSave = (task) ->
     taskToUpdate = taskSanitizer.sanitize task
@@ -63,6 +69,14 @@ module.exports = (Task) ->
       verb: 'GET'
       path: '/my-tasks/:creator'
     description: 'return the tasks of given creator using promise syntax'
+
+  Task.remoteMethod 'getFilteredTasks',
+    accepts: [{arg: 'filter', type: 'object', http: source: 'query'}]
+    returns: [{type: 'array', root: true}]
+    http:
+      verb: 'GET'
+      path: '/filtered-tasks'
+    description: 'return the tasks filtered with given argument'
 
   Task.remoteMethod 'safeSave',
     accepts: [{arg: 'task', type: 'object', required: true, http: source: 'body'}]
