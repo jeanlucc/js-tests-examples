@@ -42,8 +42,42 @@ module.exports = (Task) ->
       Task.destroyAll id: inq: _.map tasks, 'id'
 
   Task.remoteMethod 'getStaticCallback',
-    returns: {type: 'array', root: true}
+    returns: [{type: 'array', root: true}]
     http:
       verb: 'GET'
       path: '/static'
     description: 'return a static array of strings to have the simplest example of code wih callback'
+
+  Task.remoteMethod 'getMyTasksCallback',
+    accepts: [{arg: 'creator', type: 'string', required: true, http: source: 'path'}]
+    returns: [{type: 'array', root: true}]
+    http:
+      verb: 'GET'
+      path: '/my-tasks-callback/:creator'
+    description: 'return the tasks of given creator using callback syntax'
+
+  Task.remoteMethod 'getMyTasks',
+    accepts: [{arg: 'creator', type: 'string', required: true, http: source: 'path'}]
+    returns: [{type: 'array', root: true}]
+    http:
+      verb: 'GET'
+      path: '/my-tasks/:creator'
+    description: 'return the tasks of given creator using promise syntax'
+
+  Task.remoteMethod 'safeSave',
+    accepts: [{arg: 'task', type: 'object', required: true, http: source: 'body'}]
+    returns: [{type: 'object', root: true}]
+    http:
+      verb: 'PUT'
+      path: '/safe-save'
+    description: 'save the task with the creation and update date of server'
+
+  Task.remoteMethod 'batchDelete',
+    accepts: [
+      {arg: 'creator', type: 'string', required: true, http: source: 'path'}
+      {arg: 'tasks', type: 'array', required: true, http: source: 'body'}
+    ]
+    http:
+      verb: 'PUT'
+      path: '/batch-delete/:creator'
+    description: 'delete given tasks if they creator match given creator'

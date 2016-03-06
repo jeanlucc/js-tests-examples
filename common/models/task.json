@@ -8,12 +8,10 @@
       "type": "string"
     },
     "createDate": {
-      "type": "date",
-      "required": true
+      "type": "date"
     },
     "updateDate": {
-      "type": "date",
-      "required": true
+      "type": "date"
     },
     "categories": {
       "type": "string"
