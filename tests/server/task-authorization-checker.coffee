@@ -1,21 +1,29 @@
+_ = require 'lodash'
+app = require '../../server/server'
 bluebird = require 'bluebird'
+chai = require 'chai'
+chaiAsPromised = require 'chai-as-promised'
 loopback = require 'loopback'
-should = require('chai').should
+should = chai.should()
 sinon = require 'sinon'
 taskAuthorizationChecker = require '../../server/service/task-authorization-checker'
+using = require '../common/utils/data-provider'
 
-Task = loopback.getModel 'Task'
+chai.use chaiAsPromised
+
+Task = app.models.Task
 
 describe 'taskAuthorizationChecker', ->
+  beforeEach ->
+    @sandbox = sinon.sandbox.create()
+
+  afterEach ->
+    @sandbox.restore()
+
   describe 'checkTasksAreMine', ->
     it 'should fail if getMyTasks fails', (done) ->
-      sinon.stub(Task, getMyTasks).returns bluebird.reject 'DB_ERROR'
+      @sandbox.stub(Task, 'getMyTasks').returns bluebird.reject 'DB_ERROR'
       taskAuthorizationChecker.checkTasksAreMine().should.be.rejectedWith('DB_ERROR').and.notify done
-
-    getTasksData = (data) ->
-      data.tasks = _.map data.task, (id) -> id: id
-      data.myTasks = _.map data.myTasks, (id) -> id: id
-      data
 
     tasksDataProvider = _.map [
       tasks: [1]
@@ -52,10 +60,14 @@ describe 'taskAuthorizationChecker', ->
       tasks: [1, 2, 3]
       myTasks: [1, 2, 3]
       authorized: true
-    ], getTasksData
+    ], (testCase) ->
+      testCase.tasks = _.map testCase.tasks, (id) -> id: id
+      testCase.myTasks = _.map testCase.myTasks, (id) -> id: id
+      testCase
+
     using tasksDataProvider, (data) ->
       it 'should be rejected when a task is not one of mine, fulfilled otherwise', (done) ->
-        sinon.stub(Task, 'getMyTasks').returns bluebird.resolve data.myTasks
+        @sandbox.stub(Task, 'getMyTasks').returns bluebird.resolve data.myTasks
 
         promise = taskAuthorizationChecker.checkTasksAreMine data.tasks
         if data.authorized
