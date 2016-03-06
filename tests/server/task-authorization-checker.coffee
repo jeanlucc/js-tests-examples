@@ -2,14 +2,10 @@ _ = require 'lodash'
 app = require '../../server/server'
 bluebird = require 'bluebird'
 chai = require 'chai'
-chaiAsPromised = require 'chai-as-promised'
-loopback = require 'loopback'
 should = chai.should()
 sinon = require 'sinon'
 taskAuthorizationChecker = require '../../server/service/task-authorization-checker'
 using = require '../common/utils/data-provider'
-
-chai.use chaiAsPromised
 
 Task = app.models.Task
 

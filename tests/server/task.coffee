@@ -1,9 +1,8 @@
 _ = require 'lodash'
 app = require '../../server/server'
 bluebird = require 'bluebird'
-currentUserProvider = require '../../server/service/current-user-provider'
-loopback = require 'loopback'
-should = require('chai').should()
+chai = require 'chai'
+should = chai.should()
 sinon = require 'sinon'
 taskAuthorizationChecker = require '../../server/service/task-authorization-checker'
 taskSanitizer = require '../../server/service/task-sanitizer'
@@ -17,6 +16,40 @@ describe 'Task', ->
 
   afterEach ->
     @sandbox.restore()
+
+  describe 'getStaticCallback', ->
+    beforeEach ->
+      @callback = sinon.spy()
+
+    it 'should return static tasks', ->
+      Task.getStaticCallback @callback
+      @callback.should.have.been.calledWithExactly null, ['this', 'illustrate', 'the', 'basic', 'test', 'of', 'a', 'function', 'which', 'uses', 'a', 'callback']
+
+    it 'should return 12 tasks', ->
+      Task.getStaticCallback @callback
+      @callback.should.have.been.calledWithExactly null, sinon.match (tasks) ->
+        tasks.length.should.equal 12
+
+  describe 'getMyTasksCallback', ->
+    beforeEach ->
+      @sandbox = sinon.sandbox.create()
+      @TaskFindStub = @sandbox.stub(Task, 'find').callsArgWith 1, null, ['task1', 'task2']
+      @callback = sinon.spy()
+
+    afterEach ->
+      @sandbox.restore()
+
+    it 'should fail if find of tasks fails', (done) ->
+      @TaskFindStub.callsArgWith 1, 'DB_ERROR'
+      Task.getMyTasksCallback null, @callback
+      @callback.should.have.been.calledWithExactly 'DB_ERROR'
+      done()
+
+    it 'should return task of current user', (done) ->
+      Task.getMyTasksCallback 'testCreator', @callback
+      Task.find.should.have.been.calledWith where: creator: 'testCreator'
+      @callback.should.have.been.calledWithExactly null, ['task1', 'task2']
+      done()
 
   describe 'getMyTasks', ->
     beforeEach ->
@@ -76,9 +109,9 @@ describe 'Task', ->
         done()
 
     it 'should destroyAll', (done) ->
-      Task.batchDelete [{id: 1}, {id: 2}, {id: 3}]
+      Task.batchDelete 'testCreator', [{id: 1}, {id: 2}, {id: 3}]
       .then (result) ->
         should.not.exist result
-        taskAuthorizationChecker.checkTasksAreMine.should.have.been.calledWithExactly [{id: 1}, {id: 2}, {id: 3}]
+        taskAuthorizationChecker.checkTasksAreMine.should.have.been.calledWithExactly 'testCreator', [{id: 1}, {id: 2}, {id: 3}]
         Task.destroyAll.should.have.been.calledWithExactly id: inq: [1, 2, 3]
         done()
