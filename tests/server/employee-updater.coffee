@@ -1,95 +1,120 @@
 assert = require('chai').assert
+bluebird = require 'bluebird'
 employeeUpdater = require '../../server/service/employee-updater'
+loopback = require 'loopback'
+should = require('chai').should()
+sinon = require 'sinon'
 using = require '../common/utils/data-provider'
+
+Manager = loopback.getModel 'Manager'
+Team = loopback.getModel 'Team'
 
 describe 'employeeUpdater', ->
   describe 'update', ->
     beforeEach ->
-      @employee =
-        managerId: 403
-        teamId: 404
-        managerEmail: 'bobby@theodo.fr'
-        managerPhone: '3729'
-        departmentName: 'departmentName'
-        companyName: 'companyName'
-        groupName: 'groupName'
+      @sandbox = sinon.sandbox.create()
+      @ManagerFindByIdStub = @sandbox.stub(Manager, 'findById').returns bluebird.resolve()
+      @TeamFindByIdStub = @sandbox.stub(Team, 'findById').returns bluebird.resolve()
+
+    afterEach ->
+      @sandbox.restore()
 
     describe 'updateWithManager', ->
+      it 'should fail if find manager fails', (done) ->
+        @ManagerFindByIdStub.returns bluebird.reject 'MANAGER_FIND_ERROR'
+        employeeUpdater.update managerId: 42, teamId: 51
+        .catch (error) ->
+          error.should.equal 'MANAGER_FIND_ERROR'
+          done()
+
+      it 'should return employee if there is no managerId', (done) ->
+        employeeUpdater.update teamId: 51
+        .then (employee) ->
+          employee.should.deep.equal
+            teamId: 51
+            teamName: undefined
+            departmentName: undefined
+            companyName: undefined
+          done()
+
       managerDataProvider = [
-        {list: null}
-        {list: []}
-        {
-          list: [
-            {id: 1}
-            {id: 2}
-            {id: 3}
-          ]
-        }
-        {
-          list: [
-            {id: 402, managerEmail: 'bob@theodo.fr', managerPhone: '3131'}
-            {id: 403, managerEmail: 'fred@theodo.fr', managerPhone: '3232'}
-            {id: 404, managerEmail: 'alice@theodo.fr', managerPhone: '3333'}
-          ]
-          expectedManagerEmail: 'fred@theodo.fr'
-          expectedManagerPhone: '3232'
-        }
+        {}
+      ,
+        manager: id: 51
+      ,
+        manager: email: 'bobby@theodo.fr', phone: '3333'
+        expectedManagerEmail: 'bobby@theodo.fr'
+        expectedManagerPhone: '3333'
       ]
       using managerDataProvider, (data) ->
-        it 'should update employee with manager', ->
-          employee = employeeUpdater.update @employee, data.list
-          assert.equal employee.min, data.expectedMin
-          assert.equal employee.max, data.expectedMax
+        it 'should update employee with manager', (done) ->
+          @ManagerFindByIdStub.returns bluebird.resolve data.manager
+          employeeUpdater.update
+            managerId: 403
+            managerEmail: 'bobby@theodo.fr'
+            managerPhone: '3729'
+          .then (employee) ->
+            Manager.findById.should.have.been.calledWithExactly 403
+            assert.equal employee.managerEmail, data.expectedManagerEmail
+            assert.equal employee.managerPhone, data.expectedManagerPhone
+            done()
 
     describe 'updateWithTeam', ->
+      it 'should fail if find team fails', (done) ->
+        @TeamFindByIdStub.returns bluebird.reject 'TEAM_FIND_ERROR'
+        employeeUpdater.update managerId: 42, teamId: 51
+        .catch (error) ->
+          error.should.equal 'TEAM_FIND_ERROR'
+          done()
+
+      it 'should return employee if there is no teamId', (done) ->
+        employeeUpdater.update managerId: 42
+        .then (employee) ->
+          employee.should.deep.equal
+            managerId: 42
+            managerEmail: undefined
+            managerPhone: undefined
+          done()
+
       teamDataProvider = [
-        {list: null}
-        {list: []}
-        {
-          list: [
-            {id: 1}
-            {id: 2}
-            {id: 3}
-          ]
-        }
-        {
-          list: [
-            {id: 402}
-            {id: 403}
-            {id: 404}
-          ]
-        }
-        {
-          list: [
-            {id: 402, department: name: 'contracting'}
-            {id: 403, department: name: 'purchasing'}
-            {id: 404, department: name: 'IT'}
-          ]
-          expectedDepartmentName: 'IT'
-        }
-        {
-          list: [
-            {id: 402, department: name: 'contracting', company: name: 'Theodo UK'}
-            {id: 403, department: name: 'purchasing', company: name: 'BAM'}
-            {id: 404, department: name: 'IT', company: name: 'Theodo'}
-          ]
-          expectedDepartmentName: 'IT'
-          expectedCompanyName: 'Theodo'
-        }
-        {
-          list: [
-            {id: 402, department: name: 'contracting', company: name: 'Theodo UK', group: name: 'Google'}
-            {id: 403, department: name: 'purchasing', company: name: 'BAM', group: name: 'Apple'}
-            {id: 404, department: name: 'IT', company: name: 'Theodo', group: name: 'Theodo Academy'}
-          ]
-          expectedDepartmentName: 'IT'
-          expectedCompanyName: 'Theodo'
-          expectedGroupName: 'Theodo Academy'
-        }
+        {}
+      ,
+        team: id: 51
+      ,
+        team: name: 'Coinche'
+        expectedTeamName: 'Coinche'
+      ,
+        team: name: 'Coinche', department: id: 51
+        expectedTeamName: 'Coinche'
+      ,
+        team: department: name: 'IT'
+        expectedDepartmentName: 'IT'
+      ,
+        team: name: 'Coinche', department: name: 'IT', company: id: 51
+        expectedTeamName: 'Coinche'
+        expectedDepartmentName: 'IT'
+      ,
+        team: department: name: 'IT', company: name: 'Theodo'
+        expectedDepartmentName: 'IT'
+        expectedCompanyName: 'Theodo'
+      ,
+        team: name: 'Coinche', department: name: 'IT', company: name: 'Theodo'
+        expectedTeamName: 'Coinche'
+        expectedDepartmentName: 'IT'
+        expectedCompanyName: 'Theodo'
       ]
-      using teamDataProvider, (data, index) ->
-        it 'should update employee, company, group with team', ->
-          employee = employeeUpdater.update @employee, null, data.list
-          assert.deepEqual employee.department, data.expectedDepartment
-          assert.deepEqual employee.company, data.expectedCompany
-          assert.deepEqual employee.group, data.expectedGroup
+      using teamDataProvider, (data) ->
+        it 'should update employee with team', (done) ->
+          @TeamFindByIdStub.returns bluebird.resolve toJSON: -> data.team
+          employeeUpdater.update
+            teamId: 404
+            teamName: 'teamName'
+            departmentName: 'departmentName'
+            companyName: 'companyName'
+          .then (employee) ->
+            Team.findById.should.have.been.calledWithExactly 404,
+              include: [relation: 'department', scope: include: ['company']]
+            assert.deepEqual employee.teamName, data.expectedTeamName
+            assert.deepEqual employee.departmentName, data.expectedDepartmentName
+            assert.deepEqual employee.companyName, data.expectedCompanyName
+            done()
