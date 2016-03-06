@@ -15,8 +15,6 @@ module.exports = (Task) ->
   Task.disableRemoteMethod('exists', true);
   Task.disableRemoteMethod('count', true);
 
-  Task.disableRemoteMethod('deleteById', true);
-
   Task.disableRemoteMethod('__get__owner', false);
   Task.disableRemoteMethod('createChangeStream', true);
 

@@ -1,0 +1,36 @@
+{
+  "name": "Employee",
+  "plural": "employees",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "managerEmail": {
+      "type": "string"
+    },
+    "managerPhone": {
+      "type": "string"
+    },
+    "departmentName": {
+      "type": "string"
+    },
+    "companyName": {
+      "type": "string"
+    },
+    "groupName": {
+      "type": "string"
+    }
+  },
+  "relations": {
+    "manager": {
+      "model": "Mananger",
+      "type": "belongsTo"
+    },
+    "team": {
+      "model": "Team",
+      "type": "belongsTo"
+    }
+  },
+  "options": {
+    "promisify": true
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Manager",
+  "plural": "managers",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    }
+  },
+  "options": {
+    "promisify": true
+  }
+}

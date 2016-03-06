@@ -1,0 +1,20 @@
+{
+  "name": "Team",
+  "plural": "teams",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "name": {
+      "type": "string"
+    }
+  },
+  "relations": {
+    "department": {
+      "model": "Department",
+      "type": "belongsTo"
+    }
+  },
+  "options": {
+    "promisify": true
+  }
+}

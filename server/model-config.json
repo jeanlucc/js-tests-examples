@@ -36,5 +36,25 @@
   "Task": {
     "dataSource": "db",
     "public": true
+  },
+  "Manager": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Team": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Department": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Company": {
+    "dataSource": "db",
+    "public": true
+  },
+  "Employee": {
+    "dataSource": "db",
+    "public": true
   }
 }

@@ -1,0 +1,20 @@
+{
+  "name": "Department",
+  "plural": "departments",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "name": {
+      "type": "string"
+    }
+  },
+  "relations": {
+    "company": {
+      "model": "Company",
+      "type": "belongsTo"
+    }
+  },
+  "options": {
+    "promisify": true
+  }
+}

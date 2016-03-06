@@ -1,0 +1,14 @@
+{
+  "name": "Company",
+  "plural": "companies",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "name": {
+      "type": "string"
+    }
+  },
+  "options": {
+    "promisify": true
+  }
+}
