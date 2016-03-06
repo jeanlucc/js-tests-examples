@@ -1,11 +1,9 @@
-_ = require 'lodash'
-app = require '../../server/server'
 bluebird = require 'bluebird'
-chai = require 'chai'
 loopback = require 'loopback'
-should = chai.should()
+should = require('chai').should()
 sinon = require 'sinon'
 taskAuthorizationChecker = require '../../server/service/task-authorization-checker'
+taskFilter = require '../../server/service/task-filter'
 taskSanitizer = require '../../server/service/task-sanitizer'
 using = require '../common/utils/data-provider'
 
@@ -68,6 +66,26 @@ describe 'Task', ->
       .then (tasks) ->
         Task.find.should.have.been.calledWithExactly where: creator: 'testCreator'
         tasks.should.deep.equal ['task1', 'task2']
+        done()
+
+  describe 'getFilteredTasks', ->
+    beforeEach ->
+      @TaskFindStub = @sandbox.stub(Task, 'find').returns bluebird.resolve ['task1', 'task2']
+      @TaskFilterStub = @sandbox.stub(taskFilter, 'filter').returns bluebird.resolve ['filteredTask1', 'filteredTask2']
+
+    it 'should fail if find of tasks fails', (done) ->
+      @TaskFindStub.returns bluebird.reject 'DB_ERROR'
+      Task.getMyTasks()
+      .catch (error) ->
+        error.should.equal 'DB_ERROR'
+        done()
+
+    it 'should return task of current user', (done) ->
+      Task.getFilteredTasks filter: 'value'
+      .then (tasks) ->
+        Task.find.should.have.been.calledWithExactly()
+        taskFilter.filter.should.have.been.calledWithExactly ['task1', 'task2'], filter: 'value'
+        tasks.should.deep.equal ['filteredTask1', 'filteredTask2']
         done()
 
   describe 'safeSave', ->
