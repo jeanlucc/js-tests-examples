@@ -12,4 +12,4 @@ module.exports = (TaskCallback) ->
       where: ownerId: currentUser.id
       (error, tasks) ->
         return done error if error
-        done tasks
+        done null, tasks
