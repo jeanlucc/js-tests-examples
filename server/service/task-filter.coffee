@@ -1,14 +1,14 @@
 _ = require 'lodash'
-filterChecker = require './filter-checker'
+filterValidator = require './filter-validator'
 
 filterByCategories = (categories) ->
   (task) ->
-    taskCategories = task.categories.split ', '
-    _.some task.categories, (category) -> category in categories
+    taskCategories = task.categories?.split ', '
+    _.some taskCategories, (category) -> category in categories
 
 filterByCreator = (creator) ->
   (task) ->
-    task.creator.toLowerCase() is creator.toLowerCase()
+    task.creator?.toLowerCase() is creator.toLowerCase()
 
 filterNotFinishedOnly = (notFinishedOnly) ->
   (task) ->
@@ -23,7 +23,7 @@ filter = (tasks, filter) ->
   return [] unless tasks?
   return tasks unless filter?
   _.forEach registeredFilters, (filterFunction, filterKey) ->
-    if filterChecker.isFilterValid filter[filterKey]
+    if filterValidator.isFilterValid filter[filterKey]
       tasks = _.filter tasks, filterFunction filter[filterKey]
   tasks
 

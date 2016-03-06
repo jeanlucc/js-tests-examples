@@ -16,5 +16,5 @@ module.exports = (Task) ->
 
   Task.batchDelete = (tasks) ->
     taskAuthorizationChecker.checkTasksAreMine tasks
-    .then
+    .then ->
       Task.destroyAll id: inq: _.map tasks, 'id'

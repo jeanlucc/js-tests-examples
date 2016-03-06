@@ -52,7 +52,7 @@ describe 'taskFilter', ->
         filter: categories: ['category1']
         expectedTasks: tasksCategory1
       ,
-        filter: categories: ['category1, category3', 'category51']
+        filter: categories: ['category1', 'category3', 'category51']
         expectedTasks: tasksCategory1Category3
       ,
         filter: categories: ['category2', 'category3']
@@ -166,6 +166,6 @@ describe 'taskFilter', ->
       getNotFinishedOnlyDataProvider(),
       getGlobalDataProvider()
     using filterDataProvider, (data) ->
-      it "should return tasks filtered by #{args.filterName}", ->
+      it "should return tasks filtered by #{data.filterName}", ->
         filteredTask = taskFilter.filter data.tasks, data.filter
         filteredTask.should.deep.equal data.expectedTasks
