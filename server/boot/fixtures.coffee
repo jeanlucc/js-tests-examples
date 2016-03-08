@@ -1,4 +1,4 @@
-_ = require 'lodash'
+companies = require '../../fixtures/data/companies'
 tasks = require '../../fixtures/data/tasks'
 
 module.exports = (app) ->
@@ -6,6 +6,7 @@ module.exports = (app) ->
 
   fixtures =
     Task: tasks
+    Company: companies
 
   total = 0
   count = 0
