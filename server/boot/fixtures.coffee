@@ -1,3 +1,4 @@
+_ = require 'lodash'
 companies = require '../../fixtures/data/companies'
 tasks = require '../../fixtures/data/tasks'
 
@@ -14,23 +15,14 @@ module.exports = (app) ->
     total++
     dataSource.automigrate relation, (error) ->
       count++
-      if error
-        console.log "Error migrating #{relation}"
-        console.log error
-      else
-        Relation = app.models[relation]
-        total += fixture.length
-        # Exits when the fixture is empty
-        Relation.destroyAll (error) ->
-          if error
-            console.log "ERROR deleting #{relation}"
-          if count >= total
-            console.log 'DONE'
-          _.forEach fixture, (row) ->
-            Relation.create row, (error, record) ->
-              count++
-              if error
-                console.log 'Error inserting row'
-                console.log error
-              if count >= total
-                console.log 'DONE'
+      console.log "Error migrating #{relation}", error if error
+      Relation = app.models[relation]
+      total += fixture.length
+      Relation.destroyAll (error) ->
+        console.log "ERROR deleting #{relation}", error if error
+        console.log 'DONE' if count >= total
+        _.forEach fixture, (row) ->
+          Relation.create row, (error, record) ->
+            count++
+            console.log 'Error inserting row', error if error
+            console.log 'DONE' if count >= total
