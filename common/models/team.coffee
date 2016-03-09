@@ -10,3 +10,5 @@ module.exports = (Team) ->
   Team.disableRemoteMethod('count', true);
 
   Team.disableRemoteMethod('createChangeStream', true);
+
+  Team.disableRemoteMethod('__get__department', false);

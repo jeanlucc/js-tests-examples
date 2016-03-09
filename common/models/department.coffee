@@ -10,3 +10,5 @@ module.exports = (Department) ->
   Department.disableRemoteMethod('count', true);
 
   Department.disableRemoteMethod('createChangeStream', true);
+
+  Department.disableRemoteMethod('__get__company', false);

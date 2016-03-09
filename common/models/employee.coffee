@@ -13,6 +13,8 @@ module.exports = (Employee) ->
 
   Employee.disableRemoteMethod('createChangeStream', true);
 
+  Employee.disableRemoteMethod('__get__team', false);
+
   Employee.safeSave = (employee) ->
     employeeUpdater.update employee
     .then (employee) ->
