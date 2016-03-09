@@ -1,6 +1,9 @@
 _ = require 'lodash'
 companies = require '../../fixtures/data/companies'
+departments = require '../../fixtures/data/departments'
+managers = require '../../fixtures/data/managers'
 tasks = require '../../fixtures/data/tasks'
+teams = require '../../fixtures/data/teams'
 
 module.exports = (app) ->
   dataSource = app.dataSources.db
@@ -8,6 +11,9 @@ module.exports = (app) ->
   fixtures =
     Task: tasks
     Company: companies
+    Department: departments
+    Team: teams
+    Manager: managers
 
   total = 0
   count = 0
