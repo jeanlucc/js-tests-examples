@@ -46,17 +46,17 @@ describe 'employeeUpdater', ->
         expectedManagerEmail: 'bobby@theodo.fr'
         expectedManagerPhone: '3333'
       ]
-      using managerDataProvider, (data) ->
+      using managerDataProvider, ({manager, expectedManagerEmail, expectedManagerPhone}) ->
         it 'should update employee with manager', (done) ->
-          @ManagerFindByIdStub.returns bluebird.resolve data.manager
+          @ManagerFindByIdStub.returns bluebird.resolve manager
           employeeUpdater.update
             managerId: 403
             managerEmail: 'bobby@theodo.fr'
             managerPhone: '3729'
           .then (employee) ->
             Manager.findById.should.have.been.calledWithExactly 403
-            assert.equal employee.managerEmail, data.expectedManagerEmail
-            assert.equal employee.managerPhone, data.expectedManagerPhone
+            assert.equal employee.managerEmail, expectedManagerEmail
+            assert.equal employee.managerPhone, expectedManagerPhone
             done()
 
     describe 'updateWithTeam', ->
@@ -103,9 +103,9 @@ describe 'employeeUpdater', ->
         expectedDepartmentName: 'IT'
         expectedCompanyName: 'Theodo'
       ]
-      using teamDataProvider, (data) ->
+      using teamDataProvider, ({team, expectedTeamName, expectedDepartmentName, expectedCompanyName}) ->
         it 'should update employee with team', (done) ->
-          @TeamFindByIdStub.returns bluebird.resolve toJSON: -> data.team
+          @TeamFindByIdStub.returns bluebird.resolve toJSON: -> team
           employeeUpdater.update
             teamId: 404
             teamName: 'teamName'
@@ -114,7 +114,7 @@ describe 'employeeUpdater', ->
           .then (employee) ->
             Team.findById.should.have.been.calledWithExactly 404,
               include: [relation: 'department', scope: include: ['company']]
-            assert.deepEqual employee.teamName, data.expectedTeamName
-            assert.deepEqual employee.departmentName, data.expectedDepartmentName
-            assert.deepEqual employee.companyName, data.expectedCompanyName
+            assert.deepEqual employee.teamName, expectedTeamName
+            assert.deepEqual employee.departmentName, expectedDepartmentName
+            assert.deepEqual employee.companyName, expectedCompanyName
             done()

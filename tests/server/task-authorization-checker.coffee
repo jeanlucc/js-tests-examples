@@ -62,12 +62,12 @@ describe 'taskAuthorizationChecker', ->
       testCase.myTasks = _.map testCase.myTasks, (id) -> id: id
       testCase
 
-    using tasksDataProvider, (data) ->
+    using tasksDataProvider, ({tasks, myTasks, authorized}) ->
       it 'should be rejected when a task is not one of mine, fulfilled otherwise', (done) ->
-        @sandbox.stub(Task, 'getMyTasks').returns bluebird.resolve data.myTasks
+        @sandbox.stub(Task, 'getMyTasks').returns bluebird.resolve myTasks
 
-        promise = taskAuthorizationChecker.checkTasksAreMine 'testCreator', data.tasks
-        if data.authorized
+        promise = taskAuthorizationChecker.checkTasksAreMine 'testCreator', tasks
+        if authorized
           promise.then ->
             Task.getMyTasks.should.have.been.calledWithExactly 'testCreator'
             done()

@@ -17,6 +17,6 @@ describe 'filterValidator', ->
       {filterValue: ['toto'], isValid: true}
       {filterValue: [filterName: 'toto'], isValid: true}
     ]
-    using filterProvider, (data) ->
+    using filterProvider, ({filterValue, isValid}) ->
       it 'should check if filter is valid', ->
-        filterValidator.isFilterValid(data.filterValue).should.equal data.isValid
+        filterValidator.isFilterValid(filterValue).should.equal isValid

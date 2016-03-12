@@ -165,7 +165,7 @@ describe 'taskFilter', ->
       getCreatorDataProvider(),
       getNotFinishedOnlyDataProvider(),
       getGlobalDataProvider()
-    using filterDataProvider, (data) ->
-      it "should return tasks filtered by #{data.filterName}", ->
-        filteredTask = taskFilter.filter data.tasks, data.filter
-        filteredTask.should.deep.equal data.expectedTasks
+    using filterDataProvider, ({tasks, expectedTasks, filter, filterName}) ->
+      it "should return tasks filtered by #{filterName}", ->
+        filteredTask = taskFilter.filter tasks, filter
+        filteredTask.should.deep.equal expectedTasks
