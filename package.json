@@ -3,15 +3,14 @@
   "version": "1.0.0",
   "author": {
     "name": "Thibaut Gatouillat",
-    "email": "thibautg@theodo.fr"
+    "email": "thibaut.gatouillat@gmail.com"
   },
   "description": "Demo of several unit tests for your node server",
   "license": "ISC",
   "main": "server/server.js",
   "scripts": {
     "start": "node .",
-    "test": "npm run server:test",
-    "server:test": "cd tests && NODE_ENV=test ../node_modules/.bin/gulp coverage"
+    "test": "mocha"
   },
   "bugs": {
     "url": "https://github.com/tib-tib/demo-backend-tests/issues"
