@@ -1,8 +1,6 @@
 _ = require 'lodash'
-should = require('chai').should()
 sinon = require 'sinon'
 taskFilter = require '../../../server/services/task-filter'
-using = require '../../common/utils/data-provider'
 
 describe 'taskFilter', ->
   describe 'filter', ->

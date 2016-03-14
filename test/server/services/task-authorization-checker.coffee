@@ -1,11 +1,7 @@
 _ = require 'lodash'
 bluebird = require 'bluebird'
-chai = require 'chai'
 loopback = require 'loopback'
-should = chai.should()
-sinon = require 'sinon'
 taskAuthorizationChecker = require '../../../server/services/task-authorization-checker'
-using = require '../../common/utils/data-provider'
 
 Task = loopback.getModel 'Task'
 

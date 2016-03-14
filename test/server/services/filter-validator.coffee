@@ -1,6 +1,4 @@
-should = require('chai').should()
 filterValidator = require '../../../server/services/filter-validator'
-using = require '../../common/utils/data-provider'
 
 describe 'filterValidator', ->
   describe 'isFilterValid', ->

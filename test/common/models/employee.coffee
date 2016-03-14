@@ -1,8 +1,6 @@
 bluebird = require 'bluebird'
 employeeUpdater = require '../../../server/services/employee-updater'
 loopback = require 'loopback'
-should = require('chai').should()
-sinon = require 'sinon'
 
 Employee = loopback.getModel 'Employee'
 

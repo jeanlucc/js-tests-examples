@@ -1,11 +1,8 @@
 bluebird = require 'bluebird'
 loopback = require 'loopback'
-should = require('chai').should()
-sinon = require 'sinon'
 taskAuthorizationChecker = require '../../../server/services/task-authorization-checker'
 taskFilter = require '../../../server/services/task-filter'
 taskSanitizer = require '../../../server/services/task-sanitizer'
-using = require '../utils/data-provider'
 
 Task = loopback.getModel 'Task'
 
@@ -19,6 +16,11 @@ describe 'Task', ->
   describe 'getStaticCallback', ->
     beforeEach ->
       @callback = sinon.spy()
+
+    it 'should return static tasks without spy', ->
+      Task.getStaticCallback (error, result) ->
+        should.not.exist error
+        result.should.deep.equal ['this', 'illustrate', 'the', 'basic', 'test', 'of', 'a', 'function', 'which', 'uses', 'a', 'callback']
 
     it 'should return static tasks', ->
       Task.getStaticCallback @callback

@@ -1,10 +1,6 @@
-assert = require('chai').assert
 bluebird = require 'bluebird'
 employeeUpdater = require '../../../server/services/employee-updater'
 loopback = require 'loopback'
-should = require('chai').should()
-sinon = require 'sinon'
-using = require '../../common/utils/data-provider'
 
 Manager = loopback.getModel 'Manager'
 Team = loopback.getModel 'Team'
