@@ -19,7 +19,6 @@
   "homepage": "",
   "dependencies": {
     "bluebird": "3.3.3",
-    "chai-as-promised": "5.2.0",
     "compression": "1.6.1",
     "cors": "2.5.2",
     "errorhandler": "1.4.3",
@@ -30,19 +29,13 @@
     "loopback-component-explorer": "2.3.0",
     "loopback-datasource-juggler": "2.45.2",
     "loopback-promisify": "0.2.0",
-    "moment": "2.11.2",
-    "sinon-chai": "2.8.0"
+    "moment": "2.11.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "coffee-script": "^1.10.0",
-    "gulp": "^3.9.1",
-    "gulp-coffee": "^2.3.1",
-    "gulp-coffee-istanbul": "^0.8.1",
-    "gulp-mocha": "^2.2.0",
     "mocha": "^2.4.5",
     "sinon": "^1.17.3",
-    "traceur": "0.0.104"
+    "sinon-chai": "2.8.0"
   },
   "repository": {
     "type": "git",

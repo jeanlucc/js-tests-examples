@@ -20,7 +20,10 @@ describe 'taskAuthorizationChecker', ->
   describe 'checkTasksAreMine', ->
     it 'should fail if getMyTasks fails', (done) ->
       @sandbox.stub(Task, 'getMyTasks').returns bluebird.reject 'DB_ERROR'
-      taskAuthorizationChecker.checkTasksAreMine().should.be.rejectedWith('DB_ERROR').and.notify done
+      taskAuthorizationChecker.checkTasksAreMine()
+      .catch (error) ->
+        error.should.equal 'DB_ERROR'
+        done()
 
     tasksDataProvider = _.map [
       tasks: [1]
