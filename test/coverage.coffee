@@ -4,13 +4,15 @@ istanbul = require 'gulp-coffee-istanbul'
 
 gulp.task 'coverage', ->
   gulp.src [
-    '../server/**/*.coffee'
     '../common/**/*.coffee'
+    '../server/**/*.coffee'
   ]
   .pipe istanbul includeUntested: false
   .pipe istanbul.hookRequire()
   .on 'finish', ->
     gulp.src [
+      './config.coffee'
+      './common/**/*.coffee'
       './server/**/*.coffee'
     ]
     .pipe mocha()

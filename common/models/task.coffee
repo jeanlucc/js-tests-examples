@@ -1,8 +1,8 @@
 _ = require 'lodash'
 bluebird = require 'bluebird'
-taskAuthorizationChecker = require '../../server/service/task-authorization-checker'
-taskFilter = require '../../server/service/task-filter'
-taskSanitizer = require '../../server/service/task-sanitizer'
+taskAuthorizationChecker = require '../../server/services/task-authorization-checker'
+taskFilter = require '../../server/services/task-filter'
+taskSanitizer = require '../../server/services/task-sanitizer'
 
 module.exports = (Task) ->
 

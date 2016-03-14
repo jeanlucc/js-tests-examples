@@ -2,10 +2,10 @@ bluebird = require 'bluebird'
 loopback = require 'loopback'
 should = require('chai').should()
 sinon = require 'sinon'
-taskAuthorizationChecker = require '../../server/service/task-authorization-checker'
-taskFilter = require '../../server/service/task-filter'
-taskSanitizer = require '../../server/service/task-sanitizer'
-using = require '../common/utils/data-provider'
+taskAuthorizationChecker = require '../../../server/services/task-authorization-checker'
+taskFilter = require '../../../server/services/task-filter'
+taskSanitizer = require '../../../server/services/task-sanitizer'
+using = require '../utils/data-provider'
 
 Task = loopback.getModel 'Task'
 

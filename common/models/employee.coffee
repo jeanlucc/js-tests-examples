@@ -1,4 +1,4 @@
-employeeUpdater = require '../../server/service/employee-updater'
+employeeUpdater = require '../../server/services/employee-updater'
 
 module.exports = (Employee) ->
 

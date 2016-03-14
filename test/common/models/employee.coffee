@@ -1,5 +1,5 @@
 bluebird = require 'bluebird'
-employeeUpdater = require '../../server/service/employee-updater'
+employeeUpdater = require '../../../server/services/employee-updater'
 loopback = require 'loopback'
 should = require('chai').should()
 sinon = require 'sinon'

@@ -1,1 +1,0 @@
-app = require '../../server/server'
