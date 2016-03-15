@@ -1,5 +1,4 @@
-module.exports = (Manager) ->
-
+module.exports = function(Manager) {
   Manager.disableRemoteMethod('create', true);
   Manager.disableRemoteMethod('updateAttributes', false);
   Manager.disableRemoteMethod('updateAll', true);
@@ -10,3 +9,4 @@ module.exports = (Manager) ->
   Manager.disableRemoteMethod('count', true);
 
   Manager.disableRemoteMethod('createChangeStream', true);
+}

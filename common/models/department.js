@@ -1,5 +1,4 @@
-module.exports = (Department) ->
-
+module.exports = function(Department) {
   Department.disableRemoteMethod('create', true);
   Department.disableRemoteMethod('updateAttributes', false);
   Department.disableRemoteMethod('updateAll', true);
@@ -12,3 +11,4 @@ module.exports = (Department) ->
   Department.disableRemoteMethod('createChangeStream', true);
 
   Department.disableRemoteMethod('__get__company', false);
+}

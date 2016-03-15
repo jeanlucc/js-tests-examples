@@ -1,5 +1,4 @@
-module.exports = (Team) ->
-
+module.exports = function(Team) {
   Team.disableRemoteMethod('create', true);
   Team.disableRemoteMethod('updateAttributes', false);
   Team.disableRemoteMethod('updateAll', true);
@@ -12,3 +11,4 @@ module.exports = (Team) ->
   Team.disableRemoteMethod('createChangeStream', true);
 
   Team.disableRemoteMethod('__get__department', false);
+}

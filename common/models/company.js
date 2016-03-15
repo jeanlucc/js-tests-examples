@@ -1,5 +1,4 @@
-module.exports = (Company) ->
-
+module.exports = function(Company) {
   Company.disableRemoteMethod('create', true);
   Company.disableRemoteMethod('updateAttributes', false);
   Company.disableRemoteMethod('updateAll', true);
@@ -10,3 +9,4 @@ module.exports = (Company) ->
   Company.disableRemoteMethod('count', true);
 
   Company.disableRemoteMethod('createChangeStream', true);
+}

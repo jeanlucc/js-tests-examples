@@ -1,7 +1,6 @@
-employeeUpdater = require '../../server/service/employee-updater'
+var employeeUpdater = require('../../server/service/employee-updater');
 
-module.exports = (Employee) ->
-
+module.exports = function(Employee) {
   Employee.disableRemoteMethod('create', true);
   Employee.disableRemoteMethod('updateAttributes', false);
   Employee.disableRemoteMethod('updateAll', true);
@@ -15,15 +14,17 @@ module.exports = (Employee) ->
 
   Employee.disableRemoteMethod('__get__team', false);
 
-  Employee.safeSave = (employee) ->
-    employeeUpdater.update employee
-    .then (employee) ->
-      Employee.upsert employee
+  Employee.safeSave = function(employee) {
+    employeeUpdater.update(employee)
+    .then(function(employee) {
+      Employee.upsert(employee);
+    });
+  };
 
-  Employee.remoteMethod 'safeSave',
-    accepts: [{arg: 'employee', type: 'object', required: true, http: source: 'body'}]
-    returns: [{type: 'object', root: true}]
-    http:
-      verb: 'PUT'
-      path: '/safe-save'
+  Employee.remoteMethod('safeSave', {
+    accepts: [{arg: 'employee', type: 'object', required: true, http: {source: 'body'}}],
+    returns: [{type: 'object', root: true}],
+    http: {verb: 'PUT', path: '/safe-save'},
     description: 'save the employee with the information of its hierarchy'
+  });
+}
