@@ -4,7 +4,7 @@ var loopback = require('loopback');
 var Manager = loopback.getModel('Manager');
 var Team = loopback.getModel('Team');
 
-updateWithManager = function(employee) {
+var updateWithManager = function(employee) {
   if (employee.managerId == null)
     return bluebird.resolve(employee);
 
@@ -18,7 +18,7 @@ updateWithManager = function(employee) {
   });
 };
 
-updateWithTeam = function(employee) {
+var updateWithTeam = function(employee) {
   if (employee.teamId == null)
     return bluebird.resolve(employee);
 
@@ -47,7 +47,7 @@ updateWithTeam = function(employee) {
   });
 };
 
-update = function(employee) {
+var update = function(employee) {
   employee = employee || {};
   updateWithManager(employee)
   .then(function(employee) {
