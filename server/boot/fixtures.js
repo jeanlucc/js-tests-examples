@@ -6,17 +6,18 @@ var tasks = require('../../fixtures/data/tasks');
 var teams = require('../../fixtures/data/teams');
 
 module.exports = function(app) {
-  var dataSource = app.dataSources.db
+  var dataSource = app.dataSources.db;
 
-  var fixtures =
-    Task: tasks
-    Company: companies
-    Department: departments
-    Team: teams
+  var fixtures = {
+    Task: tasks,
+    Company: companies,
+    Department: departments,
+    Team: teams,
     Manager: managers
+  };
 
-  var total = 0
-  var count = 0
+  var total = 0;
+  var count = 0;
   _.forOwn(fixtures, function(fixture, relation) {
     total++;
     dataSource.automigrate(relation, function(error) {
@@ -24,7 +25,7 @@ module.exports = function(app) {
       if (error) {
         console.log("Error migrating " + relation, error);
       }
-      Relation = app.models[relation];
+      var Relation = app.models[relation];
       total += fixture.length;
       Relation.destroyAll(function(error) {
         if (error) {
@@ -47,4 +48,4 @@ module.exports = function(app) {
       });
     });
   });
-}
+};

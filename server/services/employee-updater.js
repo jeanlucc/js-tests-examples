@@ -34,8 +34,6 @@ var updateWithTeam = function(employee) {
   }).then(function(team) {
     if(team != null) {
       team = team.toJSON();
-    }
-    if(team != null) {
       employee.teamName = team.name;
       if(team.department != null) {
         employee.departmentName = team.department.name;

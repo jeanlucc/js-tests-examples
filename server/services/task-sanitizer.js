@@ -1,9 +1,9 @@
 var sanitize = function(task) {
-  task.updateDate = new Date();
+  task.updateDate = Date.now();
   if (task.id != null)
     delete task.createDate;
   else
-    task.createDate = new Date();
+    task.createDate = Date.now();
   return task;
 };
 

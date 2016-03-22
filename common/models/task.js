@@ -1,8 +1,8 @@
 var _ = require('lodash');
 var bluebird = require('bluebird');
-var taskAuthorizationChecker = require('../../server/service/task-authorization-checker');
-var taskFilter = require('../../server/service/task-filter');
-var taskSanitizer = require('../../server/service/task-sanitizer');
+var taskAuthorizationChecker = require('../../server/services/task-authorization-checker');
+var taskFilter = require('../../server/services/task-filter');
+var taskSanitizer = require('../../server/services/task-sanitizer');
 
 module.exports = function(Task) {
 
@@ -37,19 +37,19 @@ module.exports = function(Task) {
 
   Task.getFilteredTasks = function(filter) {
     return Task.find().then(function(allTasks) {
-      taskFilter.filter(allTasks, filter);
+      return taskFilter.filter(allTasks, filter);
     });
   };
 
   Task.safeSave = function(task) {
     var taskToUpdate = taskSanitizer.sanitize(task);
-    Task.upsert(taskToUpdate);
+    return Task.upsert(taskToUpdate);
   };
 
   Task.batchDelete = function(creator, tasks) {
     return taskAuthorizationChecker.checkTasksAreMine(creator, tasks)
     .then(function() {
-      Task.destroyAll({id: {inq: _.map(tasks, 'id')}});
+      return Task.destroyAll({id: {inq: _.map(tasks, 'id')}});
     });
   };
 

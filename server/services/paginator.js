@@ -1,4 +1,4 @@
-getPage = function(dataList, page, pageLength) {
+var getPage = function(dataList, page, pageLength) {
     var begin = (page - 1) * pageLength;
     var end = begin + pageLength;
     return dataList.slice(begin, end);

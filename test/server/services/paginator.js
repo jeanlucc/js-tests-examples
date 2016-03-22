@@ -1,5 +1,3 @@
-require('../../common/utils/config');
-// TODO in article require should directly
 var paginator = require('../../../server/services/paginator');
 
 describe('getPage', function(){

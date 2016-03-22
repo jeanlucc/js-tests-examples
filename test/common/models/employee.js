@@ -1,8 +1,6 @@
 var bluebird = require('bluebird');
-var employeeUpdater = require('../../server/service/employee-updater');
+var employeeUpdater = require('../../../server/services/employee-updater');
 var loopback = require('loopback');
-var should = require('chai').should();
-var sinon = require('sinon');
 
 var Employee = loopback.getModel('Employee');
 

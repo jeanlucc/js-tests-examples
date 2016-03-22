@@ -1,4 +1,4 @@
-var employeeUpdater = require('../../server/service/employee-updater');
+var employeeUpdater = require('../../server/services/employee-updater');
 
 module.exports = function(Employee) {
   Employee.disableRemoteMethod('create', true);
@@ -15,9 +15,9 @@ module.exports = function(Employee) {
   Employee.disableRemoteMethod('__get__team', false);
 
   Employee.safeSave = function(employee) {
-    employeeUpdater.update(employee)
+    return employeeUpdater.update(employee)
     .then(function(employee) {
-      Employee.upsert(employee);
+      return Employee.upsert(employee);
     });
   };
 

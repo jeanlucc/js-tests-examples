@@ -5,8 +5,8 @@ var filterByCategories = function(categories) {
   return function(task) {
     if(task.categories != null) {
       var taskCategories = task.categories.split(', ')
-      return _.some(taskCategories, function(category) {
-        return _.some(categories, category);
+      return _.some(taskCategories, function(taskCategory) {
+        return categories.indexOf(taskCategory) >= 0;
       });
     }
     return false;
@@ -41,8 +41,9 @@ var filter = function(tasks, filter) {
     return tasks;
   }
   _.forEach(registeredFilters, function(filterFunction, filterKey) {
-    if (filterValidator.isFilterValid(filter[filterKey]))
+    if (filterValidator.isFilterValid(filter[filterKey])) {
       tasks = _.filter(tasks, filterFunction(filter[filterKey]));
+    }
   });
   return tasks;
 };

@@ -10,7 +10,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node .",
-    "test": "mocha"
+    "test": "cd test && gulp coverage"
   },
   "bugs": {
     "url": "https://github.com/tib-tib/demo-backend-tests/issues"
@@ -31,9 +31,12 @@
     "moment": "2.11.2"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^2.4.5",
-    "sinon": "^1.17.3",
+    "chai": "3.5.0",
+    "gulp": "3.9.1",
+    "gulp-istanbul": "0.10.3",
+    "gulp-mocha": "2.2.0",
+    "mocha": "2.4.5",
+    "sinon": "1.17.3",
     "sinon-chai": "2.8.0"
   },
   "repository": {
